@@ -12,6 +12,11 @@ export class ControleMedicoComponent {
   consultorios = [
     { id: '01', nome: 'Consultório 01', disponivel: true },
     { id: '02', nome: 'Consultório 02', disponivel: false },
+    { id: '03', nome: 'Consultório 04', disponivel: true },
+    { id: '03', nome: 'Consultório 04', disponivel: true },
+    { id: '03', nome: 'Consultório 05', disponivel: true },
+    { id: '03', nome: 'Consultório Emergência', disponivel: true },
+    { id: '03', nome: 'Consultório Emergência', disponivel: true },
     { id: '03', nome: 'Consultório Emergência', disponivel: true },
   ];
 
