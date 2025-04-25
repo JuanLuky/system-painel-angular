@@ -1,0 +1,38 @@
+<div class="min-h-screen w-screen flex flex-col items-center justify-center px-4">
+  <div class="text-center space-y-4 flex flex-col items-center justify-center">
+    <img src="/assets/images/logo.png" alt="logo" class="w-40" />
+    <h1 class="text-4xl w-[500px] md:text-5xl font-extrabold text-blue-950">
+      Bem-vindo ao Painel de Senhas do Hospital
+    </h1>
+    <p class="text-lg md:text-xl text-blue-950">
+      Selecione uma opção para continuar
+    </p>
+  </div>
+
+  <div class="grid gap-6 mt-10 w-full max-w-md text-white">
+    <a
+      routerLink="/cadastro-paciente"
+      class="bg-blue-400  font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 transition"
+    >
+      Cadastro de Paciente
+    </a>
+
+    <a
+      routerLink="/painel-senha"
+      class="bg-blue-400 font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition"
+    >
+      Visualizar Painel de Senhas
+    </a>
+
+    <a
+      routerLink="/controle-medico"
+      class="bg-blue-400 font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition"
+    >
+      Controle do Médico
+    </a>
+  </div>
+
+  <footer class="mt-16 text-sm text-gray-800">
+    Desenvolvido por Juan Carlos © {{ today | date:'yyyy' }}
+  </footer>
+</div>
