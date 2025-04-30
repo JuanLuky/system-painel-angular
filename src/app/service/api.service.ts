@@ -25,4 +25,24 @@ export class ApiService {
   chamarPaciente(pacienteId: string): Observable<Senha> {
     return this.http.post<Senha>(`${this.baseUrl}/senhas/chamar/${pacienteId}`, {});
   }
+
+  listarConsultorios(): Observable<Consultorio[]> {
+    return this.http.get<Consultorio[]>(`${this.baseUrl}/consultorios`);
+  }
+
+  ocuparConsultorio(consultorioId: string): Observable<Consultorio> {
+    return this.http.patch<Consultorio>(
+      `${this.baseUrl}/consultorios/${consultorioId}`,
+      { status: 'OCUPADO' }
+    );
+  }
+
+  liberarConsultorio(consultorioId: string): Observable<Consultorio> {
+    return this.http.patch<Consultorio>(
+      `${this.baseUrl}/consultorios/${consultorioId}`,
+      { status: 'DISPONIVEL' }
+    );
+  }
+
+
 }

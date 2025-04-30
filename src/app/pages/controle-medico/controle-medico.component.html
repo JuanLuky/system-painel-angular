@@ -1,6 +1,6 @@
 <app-header></app-header>
-<div class="min-h-screen min-w-screen bg-green-600 p-6 flex flex-col items-center justify-center">
-  <h1 class="text-3xl font-bold mb-6 text-center text-blue-50">
+<div class="min-h-[calc(100vh-127px)] min-w-screen bg-green-600 p-6 flex flex-col items-center">
+  <h1 class="text-3xl font-bold mb-6 text-center text-blue-50 mt-4">
     Controle dos Consultórios
   </h1>
 
@@ -9,27 +9,27 @@
       <div
         class="p-6 rounded-md shadow-xl text-center"
         [ngClass]="{
-          'bg-green-100 text-green-800': c.disponivel,
-          'bg-red-100 text-red-700': !c.disponivel
+          'bg-green-100 text-green-800': c.status === 'DISPONIVEL',
+          'bg-red-100 text-red-700': c.status === 'OCUPADO'
         }"
       >
         <h2 class="text-xl font-semibold mb-2">{{ c.nome }}</h2>
         <p class="mb-4">
           Status:
           <span class="font-bold">
-            {{ c.disponivel ? 'Disponível' : 'Ocupado' }}
+            {{ c.status === 'DISPONIVEL' ? 'Disponível' : 'Ocupado' }}
           </span>
         </p>
 
         <button
-          (click)="alternarDisponibilidade(c)"
+        (click)="ocuparConsultorio(c.id, c.status)"
           class="px-4 cursor-pointer py-2 rounded-md font-medium transition text-white"
           [ngClass]="{
-            'bg-red-500 hover:bg-red-600': c.disponivel,
-            'bg-green-500 hover:bg-green-600': !c.disponivel
+            'bg-red-500 hover:bg-red-600': c.status === 'DISPONIVEL',
+            'bg-green-500 hover:bg-green-600': c.status === 'OCUPADO',
           }"
         >
-          {{ c.disponivel ? 'Marcar como Ocupado' : 'Liberar Consultório' }}
+          {{ c.status === 'DISPONIVEL' ? 'Marcar como Ocupado' : 'Liberar Consultório' }}
         </button>
       </div>
     }

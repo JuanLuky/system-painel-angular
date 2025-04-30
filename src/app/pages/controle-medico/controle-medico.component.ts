@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-controle-medico',
@@ -9,15 +10,45 @@ import { HeaderComponent } from "../../components/header/header.component";
 })
 export class ControleMedicoComponent {
 
-  consultorios = [
-    { id: '01', nome: 'Consultório 01', disponivel: true },
-    { id: '02', nome: 'Consultório 02', disponivel: false },
-    { id: '03', nome: 'Consultório 04', disponivel: true },
-    { id: '03', nome: 'Consultório 04', disponivel: true },
-  ];
+  // Variáveis para armazenar os dados dos consultórios e pacientes
+  consultorios: any[] = [];
 
-  alternarDisponibilidade(consultorio: any) {
-    consultorio.disponivel = !consultorio.disponivel;
-    // Aqui pode enviar pro backend com HTTP PATCH/PUT futuramente
+  constructor(private api : ApiService) {
+    this.refresh();
   }
+
+  refresh() {
+    this.api.listarConsultorios().subscribe((pacientes) => {
+      this.consultorios = pacientes;
+    });
+  }
+
+  ocuparConsultorio(consultorioid: string, consultorioStatus: string) {
+
+    if (consultorioStatus === 'DISPONIVEL') {
+      // Ocupa o consultório
+      this.api.ocuparConsultorio(consultorioid).subscribe({
+        next: (res) => {
+          console.log('Consultório ocupado com sucesso!');
+          this.refresh(); // Atualiza a lista de consultórios após a ocupação
+        },
+        error: (err) => {
+          console.error('Erro ao ocupar consultório:', err);
+        }
+      });
+    } else if (consultorioStatus === 'OCUPADO') {
+      // Libera o consultório
+      this.api.liberarConsultorio(consultorioid).subscribe({
+        next: (res) => {
+          console.log('Consultório liberado com sucesso!');
+          this.refresh(); // Atualiza a lista de consultórios após a liberação
+        },
+        error: (err) => {
+          console.error('Erro ao liberar consultório:', err);
+        }
+      });
+    }
+
+  }
+
 }
