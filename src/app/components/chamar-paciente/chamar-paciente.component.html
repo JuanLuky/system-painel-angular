@@ -1,0 +1,21 @@
+<div class="p-8 min-h-screen">
+  <h1 class="text-2xl font-bold mb-6">Chamada de Pacientes</h1>
+
+  <div *ngIf="pacientes.length === 0" class="text-gray-600">
+    Nenhum paciente na fila.
+  </div>
+
+  <div *ngFor="let pacienteslist of pacientes" class="bg-white rounded-2xl p-4 mb-4 shadow-md">
+    <div class="flex justify-between items-center gap-10">
+      <div>
+        <p class="text-xl font-semibold">Paciente: {{ pacienteslist.nome }}</p>
+      </div>
+      <button
+        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl"
+        (click)="chamarPaciente(pacienteslist.id)">
+        Chamar
+      </button>
+    </div>
+  </div>
+</div>
+

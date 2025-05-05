@@ -17,12 +17,19 @@ export class ApiService {
   cadastrarPaciente(paciente: Paciente): Observable<Paciente> {
     return this.http.post<Paciente>(`${this.baseUrl}/paciente`, paciente);
   }
+  listarPacientes(): Observable<Paciente[]> {
+    return this.http.get<Paciente[]>(`${this.baseUrl}/paciente`);
+  }
 
   cadastrarConsultorio(consultorio: Consultorio): Observable<Consultorio> {
     return this.http.post<Consultorio>(`${this.baseUrl}/consultorios`, consultorio);
   }
 
-  chamarPaciente(pacienteId: string): Observable<Senha> {
+  listarSenhasNaoChamadas(): Observable<Senha[]> {
+    return this.http.get<Senha[]>(`${this.baseUrl}/senhas/listar-senhas-nao-chamadas`);
+  }
+
+  chamarSenhaPaciente(pacienteId: number): Observable<Senha> {
     return this.http.post<Senha>(`${this.baseUrl}/senhas/chamar/${pacienteId}`, {});
   }
 

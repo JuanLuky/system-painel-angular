@@ -1,7 +1,7 @@
 export interface Senha {
   id: number;
-  pacienteNome: string;
-  consultorioNome: string;
+  nomePaciente: string;
+  nomeConsultorio: string;
   chamado: boolean;
   dataHora: string;
 }

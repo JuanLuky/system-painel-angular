@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
 import { ApiService } from '../../service/api.service';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-controle-medico',
@@ -13,7 +14,7 @@ export class ControleMedicoComponent {
   // Variáveis para armazenar os dados dos consultórios e pacientes
   consultorios: any[] = [];
 
-  constructor(private api : ApiService) {
+  constructor(private api : ApiService, private router: Router) {
     this.refresh();
   }
 
@@ -50,5 +51,12 @@ export class ControleMedicoComponent {
     }
 
   }
+
+
+  irParaChamada() {
+    this.router.navigate(['/chamar-paciente']);
+  }
+
+
 
 }
