@@ -3,33 +3,31 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import type { Paciente } from '../../interfaces/paciente.modal';
 import type { Senha } from '../../interfaces/senha.modal';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-chamar-paciente',
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderComponent],
   templateUrl: './chamar-paciente.component.html',
 })
 export class ChamarPacienteComponent {
   pacientes: Paciente[] = []; // Array para armazenar os pacientes
-  senhasNaoChamadas: Senha[] = [];
 
   constructor(private api: ApiService) {
-    this.senhasNaoChamadas = [];
     this.refresh();
-    this.carregarSenhasNaoChamadas();
-  }
-
-
-  carregarSenhasNaoChamadas() {
-    this.api.listarSenhasNaoChamadas().subscribe(senhas => {
-      this.senhasNaoChamadas = senhas;
-    })
   }
 
   chamarPaciente(pacienteId: number) {
     this.api.chamarSenhaPaciente(pacienteId).subscribe(() => {
-      this.carregarSenhasNaoChamadas();
-    })
+      this.refresh();
+    });
+  }
+
+  removerPaciente(pacienteId: number) {
+    this.api.removerPaciente(pacienteId).subscribe({
+      next: () => this.refresh(),
+      error: (err) => console.error('Erro ao remover:', err),
+    });
   }
 
   refresh() {
@@ -37,5 +35,4 @@ export class ChamarPacienteComponent {
       this.pacientes = pacientes;
     });
   }
-
 }

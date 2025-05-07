@@ -17,6 +17,11 @@ export class ApiService {
   cadastrarPaciente(paciente: Paciente): Observable<Paciente> {
     return this.http.post<Paciente>(`${this.baseUrl}/paciente`, paciente);
   }
+
+  removerPaciente(pacienteid : number): Observable<Paciente> {
+    return this.http.delete<Paciente>(`${this.baseUrl}/paciente/${pacienteid}`);
+  }
+
   listarPacientes(): Observable<Paciente[]> {
     return this.http.get<Paciente[]>(`${this.baseUrl}/paciente`);
   }

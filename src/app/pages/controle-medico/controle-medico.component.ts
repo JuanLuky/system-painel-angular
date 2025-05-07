@@ -52,11 +52,4 @@ export class ControleMedicoComponent {
 
   }
 
-
-  irParaChamada() {
-    this.router.navigate(['/chamar-paciente']);
-  }
-
-
-
 }

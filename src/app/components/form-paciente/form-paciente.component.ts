@@ -30,13 +30,15 @@ export class FormPacienteComponent {
       return;
     }
 
-    const paciente = this.form.value;
-    console.log('Paciente cadastrado:' , paciente);
+    const paciente = {
+      ...this.form.value,
+      nome: this.form.value.nome.toUpperCase() // Força uppercase aqui
+    };
 
     // Aqui você pode fazer o POST para o backend
     this.api.cadastrarPaciente(paciente).pipe(
         tap(() => this.showAlert = true),        // Mostra o alerta
-        switchMap(() => timer(2000)),            // Espera 2 segundos
+        switchMap(() => timer(1000)),            // Espera 2 segundos
         tap(() => {
           this.showAlert = false;
           this.router.navigate(['/']);           // Redireciona após o tempo

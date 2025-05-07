@@ -1,10 +1,8 @@
 <app-header></app-header>
 <div class="min-h-[calc(100vh-127px)] min-w-screen bg-green-600 p-6 flex flex-col items-center">
-  <h1 class="text-3xl font-bold mb-6 text-center text-blue-50 mt-4">
+  <h1 class="text-3xl font-bold mb-10 text-center text-blue-50 mt-4">
     Controle dos Consultórios
   </h1>
-  <a class="cursor-pointer mb-5 text-white bg-green-900 rounded-2xl py-2 px-6" (click)="irParaChamada()">Chamar Paciente</a>
-
 
   <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
     @for(c of consultorios; track $index) {
