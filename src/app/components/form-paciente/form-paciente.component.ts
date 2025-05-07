@@ -4,6 +4,7 @@ import { ReactiveFormsModule, Validators, FormBuilder, FormGroup } from '@angula
 import { Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { switchMap, tap, timer } from 'rxjs';
+import type { Paciente } from '../../interfaces/paciente.modal';
 
 @Component({
   selector: 'app-form-paciente',
@@ -30,7 +31,7 @@ export class FormPacienteComponent {
       return;
     }
 
-    const paciente = {
+    const paciente: Paciente = {
       ...this.form.value,
       nome: this.form.value.nome.toUpperCase() // Força uppercase aqui
     };
