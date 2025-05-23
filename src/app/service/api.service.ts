@@ -10,7 +10,7 @@ import type { Senha } from '../interfaces/senha.modal';
 })
 export class ApiService {
 
-  private baseUrl = 'http://localhost:8443/api'; // organizando o caminho
+  private baseUrl = 'https://localhost:8443/api'; // organizando o caminho
 
   constructor(private http: HttpClient) {}
 
