@@ -22,7 +22,7 @@ export class PainelSenhaComponent {
 
   conectarWebSocket(): void {
     this.stompClient = new Client({
-      webSocketFactory: () => new SockJS('https://localhost:8080/ws'),
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       debug: str => console.log(str),
     });
 
