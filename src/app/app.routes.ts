@@ -3,7 +3,7 @@ import { CadastroPacienteComponent } from './pages/cadastro-paciente/cadastro-pa
 import { PainelSenhaComponent } from './pages/painel-senha/painel-senha.component';
 import { ControleMedicoComponent } from './pages/controle-medico/controle-medico.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-import { ChamarPacienteComponent } from './components/chamar-paciente/chamar-paciente.component';
+import { ChamarPacienteComponent } from './pages/chamar-paciente/chamar-paciente.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent },

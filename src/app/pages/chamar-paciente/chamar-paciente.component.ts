@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import type { Paciente } from '../../interfaces/paciente.modal';
-import type { Senha } from '../../interfaces/senha.modal';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-chamar-paciente',
@@ -11,6 +10,11 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './chamar-paciente.component.html',
 })
 export class ChamarPacienteComponent {
+  showAlert = false;
+
+  errormessage = '';
+  sucessMessage = '';
+
   pacientes: Paciente[] = []; // Array para armazenar os pacientes
 
   constructor(private api: ApiService) {
@@ -18,8 +22,29 @@ export class ChamarPacienteComponent {
   }
 
   chamarPaciente(pacienteId: number) {
-    this.api.chamarSenhaPaciente(pacienteId).subscribe(() => {
-      this.refresh();
+    // Chama a senha do paciente e atualiza a lista de pacientes
+    this.api.chamarSenhaPaciente(pacienteId)
+    .subscribe({
+      next: () => {
+        this.errormessage = '';
+        this.sucessMessage = 'Senha chamada com sucesso!';
+        this.showAlert = true;
+
+        setTimeout(() => {
+          this.showAlert = false;
+          this.refresh(); // Atualiza a lista de pacientes
+        },2000);
+      },
+      error: (err) => {
+        this.errormessage = err.error.message;
+        this.sucessMessage = '';
+
+        this.showAlert = true;
+        setTimeout(() => {
+          this.showAlert = false;
+          this.refresh(); // Atualiza a lista de pacientes
+        },2000);
+      },
     });
   }
 

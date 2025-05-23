@@ -1,5 +1,3 @@
-import { PainelService } from './../../service/painel.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, type OnInit } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
@@ -12,12 +10,13 @@ import SockJS from 'sockjs-client';
   imports: [CommonModule, HeaderComponent],
   templateUrl: './painel-senha.component.html',
 })
-export class PainelSenhaComponent implements OnInit {
+export class PainelSenhaComponent {
+
 
   stompClient?: Client;
   senhaAtual?: Senha;
 
-  ngOnInit(): void {
+  constructor() {
     this.conectarWebSocket();
   }
 
@@ -31,6 +30,10 @@ export class PainelSenhaComponent implements OnInit {
       this.stompClient?.subscribe('/topic/senha', (message: IMessage) => {
         this.senhaAtual = JSON.parse(message.body);
         console.log('Nova senha recebida:', this.senhaAtual);
+
+        setTimeout(() => {
+          this.senhaAtual = undefined; // Limpa a senha atual após 5 segundos
+        }, 8000);
       });
     };
 
