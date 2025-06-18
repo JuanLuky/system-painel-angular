@@ -22,7 +22,7 @@ export class PainelSenhaComponent {
 
   conectarWebSocket(): void {
     this.stompClient = new Client({
-      webSocketFactory: () => new SockJS('https://localhost:8443/ws'),
+      webSocketFactory: () => new SockJS('https://spring-painel-senha.onrender.com/ws'),
       debug: str => console.log(str),
     });
 
