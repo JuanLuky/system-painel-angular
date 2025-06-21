@@ -1,55 +1,46 @@
 <app-header></app-header>
 
-<div class="min-h-[calc(100vh-127px)] min-w-screen bg-green-600 flex flex-col items-center justify-center">
-
-  <div class="w-[95%] flex flex-col items-center ">
-
-    <div class="flex flex-col items-center justify-center gap-2 w-full ">
+<div
+  class="min-h-[calc(100vh-127px)] min-w-screen bg-green-600 flex flex-col items-center justify-center"
+>
+  <div class="w-[95%] flex flex-col items-center">
+    <div class="flex flex-col items-center justify-center gap-2 w-full">
       <!-- Senha em destaque -->
-       @if (senhaAtual) {
-         <div
-           class="flex-1 w-full min-h-[450px] flex flex-col items-center p-10 text-center text-white"
-         >
-           <h2 class="text-8xl font-bold">{{senhaAtual.nomePaciente}}</h2>
-           <p class="text-6xl font-semibold mt-2"> {{senhaAtual.nomeConsultorio}} </p>
-           <span class="block mt-4 text-3xl font-semibold uppercase tracking-wide">
-            {{ senhaAtual.chamado ? 'Chamado' : 'Aguardando' }}
-           </span>
-         </div>
-       } @else {
-         <div
-           class="flex-1 w-full min-h-[460px] flex flex-col items-center text-center"
-         >
-            <h2 class="text-6xl font-bold text-white">Bem vindo! <br> Aguarde sua senha</h2>
-         </div>
+      @if (senhaAtual) {
+      <div
+        class="flex-1 w-full min-h-[450px] flex flex-col items-center p-10 text-center text-white"
+      >
+        <h2 class="text-6xl font-bold">{{ senhaAtual.nomePaciente }}</h2>
+        <p class="text-4xl font-semibold mt-2">
+          {{ senhaAtual.nomeConsultorio }}
+        </p>
+        <span class="block mt-4 text-3xl font-semibold uppercase tracking-wide">
+          {{ senhaAtual.chamado ? "Chamado" : "Aguardando" }}
+        </span>
+      </div>
+      } @else {
+      <div
+        class="flex-1 w-full min-h-[400px] flex flex-col items-center text-center"
+      >
+        <h2 class="text-6xl font-bold text-white">
+          Bem vindo! <br />
+          Aguarde sua senha
+        </h2>
+      </div>
+      }
+
+      <div class="w-[96%] fixed bottom-16 gap-3 flex flex-wrap justify-center">
+      <!-- Senhas em espera -->
+       @for( senha of ultimasSenhas; track senha.id) {
+        <div class="p-6 flex-1 bg-blue-900 rounded shadow-lg text-white text-center">
+          <h3 class="text-lg font-bold">{{ senha.nomePaciente }}</h3>
+          <p class="font-semibold">{{ senha.nomeConsultorio }}</p>
+          <span class="uppercase text-sm block mt-2">
+            {{ senha.chamado ? "Chamado" : "Aguardando" }}
+          </span>
+        </div>
        }
-
-      <!-- <div class="w-full gap-3 flex flex-wrap justify-center">
-        <div
-
-          class="p-6 flex-1 bg-blue-500 rounded shadow text-white text-center"
-        >
-          <h3 class="text-lg font-bold">Neymar </h3>
-          <p>Consultório: 1</p>
-          <span class="uppercase text-sm block mt-2">Normal</span>
-        </div>
-        <div
-
-          class="p-6 flex-1 bg-blue-500 rounded shadow text-white text-center"
-        >
-          <h3 class="text-lg font-bold">Neymar </h3>
-          <p>Consultório: 1</p>
-          <span class="uppercase text-sm block mt-2">Normal</span>
-        </div>
-        <div
-
-          class="p-6 flex-1 bg-blue-500 rounded shadow text-white text-center"
-        >
-          <h3 class="text-lg font-bold">Neymar </h3>
-          <p>Consultório: 1</p>
-          <span class="uppercase text-sm block mt-2">Normal</span>
-        </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

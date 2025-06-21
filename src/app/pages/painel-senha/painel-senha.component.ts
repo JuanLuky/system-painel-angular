@@ -1,28 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, type OnInit } from '@angular/core';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
 import type { Senha } from '../../interfaces/senha.modal';
 import { Client, type IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { ApiService } from '../../service/api.service';
+import type { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-painel-senha',
   imports: [CommonModule, HeaderComponent],
   templateUrl: './painel-senha.component.html',
 })
-export class PainelSenhaComponent {
+export class PainelSenhaComponent implements OnDestroy {
+
+  ultimasSenhas: Senha[] = [];
+  private subscription?: Subscription;
 
 
   stompClient?: Client;
   senhaAtual?: Senha;
 
-  constructor() {
+  constructor(private api: ApiService) {
     this.conectarWebSocket();
+    this.carregarSenhasChamadas();
   }
 
   conectarWebSocket(): void {
     this.stompClient = new Client({
-      webSocketFactory: () => new SockJS('https://spring-painel-senha.onrender.com/ws'),
+      // webSocketFactory: () => new SockJS('https://spring-painel-senha.onrender.com/ws'),
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       debug: str => console.log(str),
     });
 
@@ -32,12 +39,32 @@ export class PainelSenhaComponent {
         console.log('Nova senha recebida:', this.senhaAtual);
 
         setTimeout(() => {
-          this.senhaAtual = undefined; // Limpa a senha atual após 5 segundos
-        }, 8000);
+          this.senhaAtual = undefined; // Limpa a senha atual após 10 segundos
+        }, 10000);
       });
     };
 
     this.stompClient.activate();
+  }
+
+  carregarSenhasChamadas() {
+    // Método para carregar senhas chamadas, se necessário
+    this.subscription = this.api.listarSenhasChamadas()
+    .subscribe({
+      next: (senhas) => {
+        this.ultimasSenhas = senhas;
+        console.log('Senhas chamadas:', senhas);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar senhas chamadas:', err);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }

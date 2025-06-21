@@ -23,8 +23,7 @@ export class ChamarPacienteComponent {
 
   chamarPaciente(pacienteId: number) {
     // Chama a senha do paciente e atualiza a lista de pacientes
-    this.api.chamarSenhaPaciente(pacienteId)
-    .subscribe({
+    this.api.chamarSenhaPaciente(pacienteId).subscribe({
       next: () => {
         this.errormessage = '';
         this.sucessMessage = 'Senha chamada com sucesso!';
@@ -33,7 +32,7 @@ export class ChamarPacienteComponent {
         setTimeout(() => {
           this.showAlert = false;
           this.refresh(); // Atualiza a lista de pacientes
-        },2000);
+        }, 2000);
       },
       error: (err) => {
         this.errormessage = err.error.message;
@@ -43,7 +42,7 @@ export class ChamarPacienteComponent {
         setTimeout(() => {
           this.showAlert = false;
           this.refresh(); // Atualiza a lista de pacientes
-        },2000);
+        }, 2000);
       },
     });
   }
@@ -59,5 +58,18 @@ export class ChamarPacienteComponent {
     this.api.listarPacientes().subscribe((pacientes) => {
       this.pacientes = pacientes;
     });
+  }
+
+  formatarStatus(status: string): { label: string, color: string } {
+    switch (status) {
+      case 'NAO_ATENDIDO':
+        return { label: 'Não Atendido', color: 'bg-red-500' };
+      case 'EM_ATENDIMENTO':
+        return { label: 'Em Atendimento', color: 'bg-blue-500' };
+      case 'ATENDIDO':
+        return { label: 'Atendido', color: 'bg-green-500' };
+      default:
+        return { label: 'Desconhecido', color: 'bg-gray-500' };
+    }
   }
 }

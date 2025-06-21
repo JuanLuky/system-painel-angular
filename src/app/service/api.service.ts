@@ -1,57 +1,65 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, switchMap, timer } from 'rxjs';
 import type { Paciente } from '../interfaces/paciente.modal';
 import type { Consultorio } from '../interfaces/consultorio.modal';
 import type { Senha } from '../interfaces/senha.modal';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private baseUrl = 'https://spring-painel-senha.onrender.com/api'; // organizando o caminho
+  private API_URL = environment.API_URL; // organizando o caminho
 
   constructor(private http: HttpClient) {}
 
   cadastrarPaciente(paciente: Paciente): Observable<Paciente> {
-    return this.http.post<Paciente>(`${this.baseUrl}/paciente`, paciente);
+    return this.http.post<Paciente>(`${this.API_URL}/paciente`, paciente);
   }
 
   removerPaciente(pacienteid : number): Observable<Paciente> {
-    return this.http.delete<Paciente>(`${this.baseUrl}/paciente/${pacienteid}`);
+    return this.http.delete<Paciente>(`${this.API_URL}/paciente/${pacienteid}`);
   }
 
   listarPacientes(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(`${this.baseUrl}/paciente`);
+    return this.http.get<Paciente[]>(`${this.API_URL}/paciente`);
   }
 
   cadastrarConsultorio(consultorio: Consultorio): Observable<Consultorio> {
-    return this.http.post<Consultorio>(`${this.baseUrl}/consultorios`, consultorio);
+    return this.http.post<Consultorio>(`${this.API_URL}/consultorios`, consultorio);
   }
 
-  listarSenhasNaoChamadas(): Observable<Senha[]> {
-    return this.http.get<Senha[]>(`${this.baseUrl}/senhas/listar-senhas-nao-chamadas`);
+  listarSenhasChamadas(pollingInterval: number = 10000): Observable<Senha[]> {
+    return timer(0, pollingInterval).pipe(
+      switchMap(() => this.http.get<any[]>(`${this.API_URL}/senhas/listar-senhas-chamadas`)),
+      map(senhas => {
+        return senhas
+          .sort((a, b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime())
+          .slice(0, 3);
+      })
+    );
   }
 
   chamarSenhaPaciente(pacienteId: number): Observable<Senha> {
-    return this.http.post<Senha>(`${this.baseUrl}/senhas/chamar/${pacienteId}`, {});
+    return this.http.post<Senha>(`${this.API_URL}/senhas/chamar/${pacienteId}`, {});
   }
 
   listarConsultorios(): Observable<Consultorio[]> {
-    return this.http.get<Consultorio[]>(`${this.baseUrl}/consultorios`);
+    return this.http.get<Consultorio[]>(`${this.API_URL}/consultorios`);
   }
 
   ocuparConsultorio(consultorioId: string): Observable<Consultorio> {
     return this.http.patch<Consultorio>(
-      `${this.baseUrl}/consultorios/${consultorioId}`,
+      `${this.API_URL}/consultorios/${consultorioId}`,
       { status: 'OCUPADO' }
     );
   }
 
   liberarConsultorio(consultorioId: string): Observable<Consultorio> {
     return this.http.patch<Consultorio>(
-      `${this.baseUrl}/consultorios/${consultorioId}`,
+      `${this.API_URL}/consultorios/${consultorioId}`,
       { status: 'DISPONIVEL' }
     );
   }
