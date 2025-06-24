@@ -4,7 +4,7 @@ import { map, Observable, switchMap, timer } from 'rxjs';
 import type { Paciente } from '../interfaces/paciente.modal';
 import type { Consultorio } from '../interfaces/consultorio.modal';
 import type { Senha } from '../interfaces/senha.modal';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
