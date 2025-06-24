@@ -1,45 +1,45 @@
-<div class="min-h-screen w-screen flex flex-col items-center justify-center px-4">
+<div class="min-h-screen w-screen flex flex-col items-center justify-center px-4 py-8">
   <div class="text-center space-y-4 flex flex-col items-center justify-center">
-    <img src="/assets/images/logo.png" alt="logo" class="w-40" />
-    <h1 class="text-4xl w-[500px] md:text-5xl font-extrabold text-blue-950">
+    <img src="/assets/images/logo.png" alt="logo" class="w-32 sm:w-40" />
+    <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-blue-950 max-w-xs sm:max-w-md md:w-[500px]">
       Bem-vindo ao Painel de Senhas do Hospital
     </h1>
-    <p class="text-lg md:text-xl text-blue-950">
+    <p class="text-base sm:text-lg md:text-xl text-blue-950">
       Selecione uma opção para continuar
     </p>
   </div>
 
-  <div class="grid gap-6 mt-10 w-full max-w-md text-white">
+  <div class="grid gap-4 sm:gap-6 mt-10 w-full max-w-xs sm:max-w-md text-white">
     <a
       routerLink="/cadastro-paciente"
-      class="bg-blue-400  font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 transition"
+      class="bg-blue-400 font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-2xl shadow hover:bg-blue-500 transition text-center"
     >
       Cadastro de Paciente
     </a>
 
     <a
       routerLink="/painel-senha"
-      class="bg-blue-400 font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition"
+      class="bg-blue-400 font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition text-center"
     >
       Visualizar Painel de Senhas
     </a>
 
     <a
       routerLink="/controle-medico"
-      class="bg-blue-400 font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition"
+      class="bg-blue-400 font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition text-center"
     >
       Consultório Médico
     </a>
 
     <a
       routerLink="/chamar-paciente"
-      class="bg-blue-400 font-medium py-4 px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition"
+      class="bg-blue-400 font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-2xl shadow hover:bg-blue-500 hover:text-gray-50 transition text-center"
     >
       Chamada de Paciente
     </a>
   </div>
 
-  <footer class="mt-16 text-sm text-gray-800">
+  <footer class="mt-12 text-xs sm:text-sm text-gray-800 text-center px-2">
     Desenvolvido por Juan Carlos © {{ today | date:'yyyy' }}
   </footer>
 </div>

@@ -14,6 +14,9 @@ import type { Subscription } from 'rxjs';
 })
 export class PainelSenhaComponent implements OnDestroy {
 
+    public today: Date = new Date();
+
+
   ultimasSenhas: Senha[] = [];
   private subscription?: Subscription;
 

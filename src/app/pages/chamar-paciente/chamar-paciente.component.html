@@ -1,6 +1,6 @@
 <app-header></app-header>
-<div class="p-8 min-w-screen min-h-[calc(100vh-127px)] bg-green-600">
-  <h1 class="text-2xl text-white font-bold mb-6">Chamada de Pacientes</h1>
+<div class="p-4 sm:p-8 min-w-screen min-h-[calc(100vh-127px)] bg-green-600">
+  <h1 class="text-xl sm:text-2xl text-white font-bold mb-6">Chamada de Pacientes</h1>
 
   <div *ngIf="pacientes.length === 0" class="text-white">
     Nenhum paciente na fila.
@@ -10,13 +10,13 @@
     *ngFor="let pacienteslist of pacientes"
     class="bg-white rounded-lg p-4 mb-4 shadow-md"
   >
-    <div class="flex justify-between items-center gap-10">
-      <div class="gap-2 flex flex-col">
-        <p class="text-xl font-semibold">{{ pacienteslist.nome }}</p>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-10">
+      <div class="flex flex-col gap-2 w-full">
+        <p class="text-base sm:text-xl font-semibold">{{ pacienteslist.nome }}</p>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <p
-            class="text-white py-1 px-4 inline rounded-full text-sm font-semibold"
+            class="text-white py-1 px-3 sm:px-4 rounded-full text-xs sm:text-sm font-semibold"
             [class.bg-red-500]="pacienteslist.prioridade"
             [class.bg-green-500]="!pacienteslist.prioridade"
           >
@@ -24,11 +24,9 @@
           </p>
 
           <div>
-            <ng-container
-              *ngIf="formatarStatus(pacienteslist.status) as statusInfo"
-            >
+            <ng-container *ngIf="formatarStatus(pacienteslist.status) as statusInfo">
               <p
-                class="text-white py-1 px-4 inline rounded-full text-sm font-semibold"
+                class="text-white py-1 px-3 sm:px-4 rounded-full text-xs sm:text-sm font-semibold"
                 [ngClass]="statusInfo.color"
               >
                 Status: {{ statusInfo.label }}
@@ -37,16 +35,17 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-4">
+
+      <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto">
         <button
           (click)="chamarPaciente(pacienteslist.id)"
-          class="bg-green-500 cursor-pointer text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition duration-200"
+          class="w-full sm:w-auto bg-green-500 cursor-pointer text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition duration-200"
         >
           Chamar
         </button>
         <button
           (click)="removerPaciente(pacienteslist.id)"
-          class="bg-red-500 cursor-pointer text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-200"
+          class="w-full sm:w-auto bg-red-500 cursor-pointer text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-200"
         >
           Remover
         </button>
@@ -55,13 +54,13 @@
   </div>
 
   @if (showAlert) {
-  <div
-    class="fixed text-center right-6 bottom-6 px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500"
-    [ngClass]="
-      errormessage ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-    "
-  >
-    {{ errormessage || sucessMessage }}
-  </div>
+    <div
+      class="fixed text-center right-4 sm:right-6 bottom-4 sm:bottom-6 px-4 sm:px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500 text-sm sm:text-base"
+      [ngClass]="
+        errormessage ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+      "
+    >
+      {{ errormessage || sucessMessage }}
+    </div>
   }
 </div>
