@@ -35,7 +35,7 @@ export class ChamarPacienteComponent {
         }, 2000);
       },
       error: (err) => {
-        this.errormessage = err.error.message;
+        this.errormessage = 'A senha já foi chamada!';
         this.sucessMessage = '';
 
         this.showAlert = true;
@@ -60,10 +60,53 @@ export class ChamarPacienteComponent {
     });
   }
 
+  getPriorityCount(): number {
+    return this.pacientes.filter(p => p.prioridade).length;
+  }
+
+  getStatusStyle(status: string): string {
+    switch (status) {
+      case 'NAO_ATENDIDO':
+        return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+      case 'EM_ATENDIMENTO':
+        return 'bg-blue-100 text-blue-800 border border-blue-200';
+      case 'ATENDIDO':
+        return 'bg-green-100 text-green-800 border border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border border-gray-200';
+    }
+  }
+
+  getStatusDotStyle(status: string): string {
+    switch (status) {
+      case 'NAO_ATENDIDO':
+        return 'bg-yellow-400';
+      case 'EM_ATENDIMENTO':
+        return 'bg-blue-400';
+      case 'ATENDIDO':
+        return 'bg-green-400';
+      default:
+        return 'bg-gray-400';
+    }
+  }
+
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'NAO_ATENDIDO':
+        return 'Não Atendido';
+      case 'EM_ATENDIMENTO':
+        return 'Em Atendimento';
+      case 'ATENDIDO':
+        return 'Atendido';
+      default:
+        return status;
+    }
+  }
+
   formatarStatus(status: string): { label: string, color: string } {
     switch (status) {
       case 'NAO_ATENDIDO':
-        return { label: 'Não Atendido', color: 'bg-red-500' };
+        return { label: 'Não Atendido', color: 'bg-yellow-500' };
       case 'EM_ATENDIMENTO':
         return { label: 'Em Atendimento', color: 'bg-blue-500' };
       case 'ATENDIDO':
