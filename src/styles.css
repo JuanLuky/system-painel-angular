@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-medical-50: #f0fdf4;
+  --color-medical-50:rgb(247, 255, 250);
   --color-medical-100: #dcfce7;
   --color-medical-200: #bbf7d0;
   --color-medical-300: #86efac;
@@ -18,9 +18,10 @@ html {
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  background-color: aliceblue;
+  background: rgb(247, 255, 250);
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 }
 
 * {
