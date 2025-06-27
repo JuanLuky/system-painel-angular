@@ -102,17 +102,4 @@ export class ChamarPacienteComponent {
         return status;
     }
   }
-
-  formatarStatus(status: string): { label: string, color: string } {
-    switch (status) {
-      case 'NAO_ATENDIDO':
-        return { label: 'Não Atendido', color: 'bg-yellow-500' };
-      case 'EM_ATENDIMENTO':
-        return { label: 'Em Atendimento', color: 'bg-blue-500' };
-      case 'ATENDIDO':
-        return { label: 'Atendido', color: 'bg-green-500' };
-      default:
-        return { label: 'Desconhecido', color: 'bg-gray-500' };
-    }
-  }
 }
