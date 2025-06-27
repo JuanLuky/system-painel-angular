@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { HeaderComponent } from "../../components/header/header.component";
+import { HeaderComponent } from '../../components/header/header.component';
 import { ApiService } from '../../service/api.service';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-controle-medico',
@@ -10,11 +10,10 @@ import { Router} from '@angular/router';
   templateUrl: './controle-medico.component.html',
 })
 export class ControleMedicoComponent {
-
   // Variáveis para armazenar os dados dos consultórios e pacientes
   consultorios: any[] = [];
 
-  constructor(private api : ApiService, private router: Router) {
+  constructor(private api: ApiService, private router: Router) {
     this.refresh();
   }
 
@@ -25,7 +24,6 @@ export class ControleMedicoComponent {
   }
 
   ocuparConsultorio(consultorioid: string, consultorioStatus: string) {
-
     if (consultorioStatus === 'DISPONIVEL') {
       // Ocupa o consultório
       this.api.ocuparConsultorio(consultorioid).subscribe({
@@ -35,7 +33,7 @@ export class ControleMedicoComponent {
         },
         error: (err) => {
           console.error('Erro ao ocupar consultório:', err);
-        }
+        },
       });
     } else if (consultorioStatus === 'OCUPADO') {
       // Libera o consultório
@@ -46,10 +44,15 @@ export class ControleMedicoComponent {
         },
         error: (err) => {
           console.error('Erro ao liberar consultório:', err);
-        }
+        },
       });
     }
-
   }
 
+  get consultoriosOcupados(): number {
+    return this.consultorios.filter((c) => c.status === 'OCUPADO').length;
+  }
+  get consultoriosDisponiveis(): number {
+    return this.consultorios.filter((c) => c.status === 'DISPONIVEL').length;
+  }
 }
