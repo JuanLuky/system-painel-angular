@@ -15,15 +15,15 @@
   </div>
 
   <!-- Prioridade -->
-  <div class="flex items-center gap-2">
-    <input type="checkbox" id="prioridade" formControlName="prioridade" class="accent-primary" />
+  <div class="flex items-center gap-2 mb-6">
+    <input type="checkbox" id="prioridade" formControlName="prioridade" class="accent-medical-600" />
     <label for="prioridade" class="text-sm">Paciente prioritário (idoso, PCD)</label>
   </div>
 
   <!-- Botão -->
   <button
     type="submit"
-    class="w-full cursor-pointer text-amber-50 bg-blue-500 text-emergencia py-2 rounded-lg font-medium hover:bg-blue-800 transition"
+    class="w-full cursor-pointer text-amber-50 bg-medical-600 hover:bg-medical-700 py-3 rounded-lg font-medium transition shadow-sm duration-200 ease-in-out transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2"
   >
     Cadastrar
   </button>
@@ -31,7 +31,7 @@
   <!-- Botão de Voltar -->
   <button
     (click)="onBack()"
-    class="w-full cursor-pointer text-gray-00 bg-gray-300 text-emergencia py-2 rounded-lg font-medium hover:bg-gray-500 hover:text-gray-50 transition"
+    class="w-full cursor-pointer bg-gray-300 py-3 rounded-lg font-medium hover:bg-gray-500 hover:text-gray-50 transition duration-200 ease-in-out transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
   >
     Voltar
   </button>

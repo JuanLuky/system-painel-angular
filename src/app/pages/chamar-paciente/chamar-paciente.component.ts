@@ -3,14 +3,27 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import type { Paciente } from '../../interfaces/paciente.modal';
 import { HeaderComponent } from '../../components/header/header.component';
+import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ConsultorioSelectComponent } from '../../components/consultorio-select/consultorio-select.component';
 
 @Component({
   selector: 'app-chamar-paciente',
-  imports: [CommonModule, HeaderComponent],
+  imports: [
+    CommonModule,
+    HeaderComponent,
+    EmptyStateComponent,
+    ModalComponent,
+    ConsultorioSelectComponent,
+  ],
   templateUrl: './chamar-paciente.component.html',
 })
 export class ChamarPacienteComponent {
   showAlert = false;
+
+  modalAberto = false;
+  consultorioSelecionado = '';
+  pacienteSelecionado: Paciente | null = null;
 
   errormessage = '';
   sucessMessage = '';
@@ -60,8 +73,38 @@ export class ChamarPacienteComponent {
     });
   }
 
+  abrirModalChamar(paciente: Paciente) {
+    console.clear();
+    console.log('--------------------------');
+    console.log('Modal ABERTO para:', paciente.nome);
+    this.pacienteSelecionado = paciente;
+    this.modalAberto = true;
+    this.consultorioSelecionado = '';
+  }
+
+  fecharModal() {
+    this.modalAberto = false;
+    this.pacienteSelecionado = null;
+    this.consultorioSelecionado = '';
+  }
+
+  confirmarChamada() {
+    if (!this.consultorioSelecionado || !this.pacienteSelecionado) {
+      alert('Por favor, selecione um consultório.');
+      return;
+    }
+
+    // Faltando somente a logica de chamar o paciente para o consultório selecionado, pois ainda está faltando a implementação do backend para isso.
+    this.chamarPaciente(this.pacienteSelecionado.id);
+
+    alert(
+      `Paciente ${this.pacienteSelecionado.nome} foi chamado para o Consultório ${this.consultorioSelecionado}!`
+    );
+    this.fecharModal();
+  }
+
   getPriorityCount(): number {
-    return this.pacientes.filter(p => p.prioridade).length;
+    return this.pacientes.filter((p) => p.prioridade).length;
   }
 
   getStatusStyle(status: string): string {

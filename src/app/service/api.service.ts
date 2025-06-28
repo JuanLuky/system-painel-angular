@@ -31,6 +31,11 @@ export class ApiService {
     return this.http.post<Consultorio>(`${this.API_URL}/consultorios`, consultorio);
   }
 
+  // Método para listar senhas chamadas com polling
+  // Retorna as 3 senhas mais recentes, ordenadas por data e hora.
+  // O operador switchMap é usado para fazer a requisição HTTP a cada intervalo de polling
+  // O método pode ser usado para atualizar a lista de senhas chamadas em tempo real,
+  // sem a necessidade de recarregar a página.
   listarSenhasChamadas(pollingInterval: number = 10000): Observable<Senha[]> {
     return timer(0, pollingInterval).pipe(
       switchMap(() => this.http.get<any[]>(`${this.API_URL}/senhas/listar-senhas-chamadas`)),
