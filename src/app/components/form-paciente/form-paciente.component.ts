@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { ReactiveFormsModule, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, Validators, FormBuilder, FormGroup, FormControlName, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
-import { switchMap, tap, timer } from 'rxjs';
+import { firstValueFrom, switchMap, tap, timer } from 'rxjs';
 import type { Paciente } from '../../interfaces/paciente.modal';
 
 @Component({
@@ -14,41 +14,61 @@ import type { Paciente } from '../../interfaces/paciente.modal';
 export class FormPacienteComponent {
 
   showAlert = false;
-  alertMessage = 'Paciente cadastrado com sucesso!';
+  alertMessage = '';
 
-  form: FormGroup;
+  form: FormGroup = null as any; // Inicializa como null e depois será definido no ngOnInit
 
-  constructor(private fb: FormBuilder, private router: Router, private api: ApiService) {
-    this.form = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      prioridade: [false],
+  constructor(private router: Router, private api: ApiService) {}
+
+  ngOnInit() {
+    this.form = new FormGroup({
+      nome: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      cpf: new FormControl('', [Validators.required, Validators.maxLength(14)]),
+      prioridade: new FormControl(false),
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
+      this.form.markAllAsTouched(); // Marca todos os campos como tocados para mostrar erros
       return;
     }
 
     const paciente: Paciente = {
-      ...this.form.value,
-      nome: this.form.value.nome.toUpperCase() // Força uppercase aqui
+      ...this.form?.value,
+      nome: this.form?.value.nome.toUpperCase(),// Força uppercase aqui
+      cpf: this.form?.value.cpf.replace(/\D/g, ''), // Remove caracteres não numéricos do CPF
     };
 
     // Aqui você pode fazer o POST para o backend
-    this.api.cadastrarPaciente(paciente).pipe(
-        tap(() => this.showAlert = true),        // Mostra o alerta
-        switchMap(() => timer(1000)),            // Espera 2 segundos
-        tap(() => {
-          this.showAlert = false;
-          this.router.navigate(['/']);           // Redireciona após o tempo
-        })
-      ).subscribe();
+    // this.api.cadastrarPaciente(paciente).pipe(
+    //     tap(() => this.showAlert = true),
+    //           // Mostra o alerta
+    //     switchMap(() => timer(1000)),            // Espera 2 segundos
+    //     tap(() => {
+    //       this.showAlert = false;
+    //       this.router.navigate(['/']);           // Redireciona após o tempo
+    //     })
+    //   ).subscribe();
+
+    try {
+      const response = await firstValueFrom(
+        this.api.cadastrarPaciente(paciente)
+      )
+
+      this.showAlert = true;
+      this.alertMessage = 'Paciente cadastrado com sucesso!';
+
+
+    } catch (error : any) {
+      console.error(error.message);
+      this.showAlert = true;
+      this.alertMessage = error.message || 'Erro ao cadastrar paciente';
+    }
   }
 
   get nome() {
-    return this.form.get('nome');
+    return this.form?.get('nome');
   }
 
   onBack() {

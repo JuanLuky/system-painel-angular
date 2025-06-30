@@ -74,9 +74,6 @@ export class ChamarPacienteComponent {
   }
 
   abrirModalChamar(paciente: Paciente) {
-    console.clear();
-    console.log('--------------------------');
-    console.log('Modal ABERTO para:', paciente.nome);
     this.pacienteSelecionado = paciente;
     this.modalAberto = true;
     this.consultorioSelecionado = '';
@@ -90,16 +87,18 @@ export class ChamarPacienteComponent {
 
   confirmarChamada() {
     if (!this.consultorioSelecionado || !this.pacienteSelecionado) {
-      alert('Por favor, selecione um consultório.');
-      return;
+      this.showAlert = true;
+      this.errormessage = 'Por favor, selecione um consultório.';
+
+      setTimeout(() => {
+          this.showAlert = false;
+        }, 2000);
+      return ;
     }
 
     // Faltando somente a logica de chamar o paciente para o consultório selecionado, pois ainda está faltando a implementação do backend para isso.
     this.chamarPaciente(this.pacienteSelecionado.id);
 
-    alert(
-      `Paciente ${this.pacienteSelecionado.nome} foi chamado para o Consultório ${this.consultorioSelecionado}!`
-    );
     this.fecharModal();
   }
 
