@@ -1,20 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { ReactiveFormsModule, Validators, FormBuilder, FormGroup, FormControlName, FormControl } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  Validators,
+  FormGroup,
+  FormControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
-import { firstValueFrom, switchMap, tap, timer } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import type { Paciente } from '../../interfaces/paciente.modal';
+import { AlertMessageComponent } from '../alert-message/alert-message.component';
 
 @Component({
   selector: 'app-form-paciente',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertMessageComponent],
   templateUrl: './form-paciente.component.html',
 })
 export class FormPacienteComponent {
-
   showAlert = false;
-  alertMessage = '';
+  errormessage = '';
+  sucessMessage = '';
 
   form: FormGroup = null as any; // Inicializa como null e depois será definido no ngOnInit
 
@@ -36,39 +42,51 @@ export class FormPacienteComponent {
 
     const paciente: Paciente = {
       ...this.form?.value,
-      nome: this.form?.value.nome.toUpperCase(),// Força uppercase aqui
+      nome: this.form?.value.nome.toUpperCase(), // Força uppercase aqui
       cpf: this.form?.value.cpf.replace(/\D/g, ''), // Remove caracteres não numéricos do CPF
     };
-
-    // Aqui você pode fazer o POST para o backend
-    // this.api.cadastrarPaciente(paciente).pipe(
-    //     tap(() => this.showAlert = true),
-    //           // Mostra o alerta
-    //     switchMap(() => timer(1000)),            // Espera 2 segundos
-    //     tap(() => {
-    //       this.showAlert = false;
-    //       this.router.navigate(['/']);           // Redireciona após o tempo
-    //     })
-    //   ).subscribe();
 
     try {
       const response = await firstValueFrom(
         this.api.cadastrarPaciente(paciente)
-      )
+      );
 
+
+      // Sucesso
+      this.errormessage = ''; // 🔧 LIMPA MENSAGEM DE ERRO
+      this.sucessMessage = 'Paciente cadastrado com sucesso!';
       this.showAlert = true;
-      this.alertMessage = 'Paciente cadastrado com sucesso!';
+      this.form.reset();
+      this.timerAlert();
+    } catch (error: any) {
+      console.error('Erro ao cadastrar paciente:', error);
 
-
-    } catch (error : any) {
-      console.error(error.message);
+      this.sucessMessage = ''; // 🔧 LIMPA MENSAGEM DE SUCESSO
       this.showAlert = true;
-      this.alertMessage = error.message || 'Erro ao cadastrar paciente';
+
+      if (error.error && error.error.message) {
+        this.errormessage = error.error.message;
+      } else if (error.message) {
+        this.errormessage = error.message;
+      } else {
+        this.errormessage = 'Erro ao cadastrar paciente.';
+      }
+      this.form.reset();
+      this.timerAlert();
     }
   }
 
   get nome() {
     return this.form?.get('nome');
+  }
+  get cpf() {
+    return this.form?.get('cpf');
+  }
+
+  timerAlert() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 2500);
   }
 
   onBack() {

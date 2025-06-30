@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ConsultorioSelectComponent } from '../../components/consultorio-select/consultorio-select.component';
+import { AlertMessageComponent } from "../../components/alert-message/alert-message.component";
 
 @Component({
   selector: 'app-chamar-paciente',
@@ -15,7 +16,8 @@ import { ConsultorioSelectComponent } from '../../components/consultorio-select/
     EmptyStateComponent,
     ModalComponent,
     ConsultorioSelectComponent,
-  ],
+    AlertMessageComponent
+],
   templateUrl: './chamar-paciente.component.html',
 })
 export class ChamarPacienteComponent {
@@ -42,22 +44,23 @@ export class ChamarPacienteComponent {
         this.sucessMessage = 'Senha chamada com sucesso!';
         this.showAlert = true;
 
-        setTimeout(() => {
-          this.showAlert = false;
-          this.refresh(); // Atualiza a lista de pacientes
-        }, 2000);
+        this.timer();
       },
       error: (err) => {
-        this.errormessage = 'A senha já foi chamada!';
         this.sucessMessage = '';
+        this.errormessage = 'A senha já foi chamada!';
 
         this.showAlert = true;
-        setTimeout(() => {
-          this.showAlert = false;
-          this.refresh(); // Atualiza a lista de pacientes
-        }, 2000);
+        this.timer();
       },
     });
+  }
+
+  timer() {
+    setTimeout(() => {
+      this.showAlert = false;
+      this.refresh(); // Atualiza a lista de pacientes
+    }, 2000);
   }
 
   removerPaciente(pacienteId: number) {
