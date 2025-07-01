@@ -1,5 +1,5 @@
 export interface Consultorio {
-  id?: number;
+  id: number;
   nome: string;
   status: 'DISPONIVEL' | 'OCUPADO';
 }

@@ -52,7 +52,7 @@ export class PainelSenhaComponent implements OnDestroy {
 
   carregarSenhasChamadas() {
     // Método para carregar senhas chamadas, se necessário
-    this.subscription = this.api.listarSenhasChamadas()
+    this.subscription = this.api.listarUltimasSenhasChamadas()
     .subscribe({
       next: (senhas) => {
         this.ultimasSenhas = senhas;

@@ -14,7 +14,7 @@
   >
     <!-- Header -->
     <div
-      class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between"
+      class="px-6 py-4 mt-[-12px] border-b border-gray-100 bg-gray-100 flex items-center justify-between"
     >
       <h3 class="text-lg font-semibold text-gray-800">{{ title }}</h3>
       <button
@@ -51,11 +51,11 @@
             d="M6 18L18 6M6 6l12 12"
           ></path>
         </svg>
-        Cancelar
+        {{cancelButtonText}}
       </button>
 
       <button
-        (click)="onConfirm()"
+        (click)="onConfirm($event)"
         class="bg-medical-600 hover:bg-medical-700 text-white font-medium py-2.5 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2 flex items-center justify-center gap-2 min-w-[120px]"
       >
         <svg
@@ -71,7 +71,7 @@
             d="M5 12h14M12 5l7 7-7 7M0 0"
           ></path>
         </svg>
-        Confirmar
+        {{confirmButtonText}}
       </button>
     </div>
   </div>

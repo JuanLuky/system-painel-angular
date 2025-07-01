@@ -1,12 +1,14 @@
+import type { Consultorio } from './../../interfaces/consultorio.modal';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import type { Paciente } from '../../interfaces/paciente.modal';
+
 import { HeaderComponent } from '../../components/header/header.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ConsultorioSelectComponent } from '../../components/consultorio-select/consultorio-select.component';
-import { AlertMessageComponent } from "../../components/alert-message/alert-message.component";
+import { AlertMessageComponent } from '../../components/alert-message/alert-message.component';
 
 @Component({
   selector: 'app-chamar-paciente',
@@ -16,51 +18,81 @@ import { AlertMessageComponent } from "../../components/alert-message/alert-mess
     EmptyStateComponent,
     ModalComponent,
     ConsultorioSelectComponent,
-    AlertMessageComponent
-],
+    AlertMessageComponent,
+  ],
   templateUrl: './chamar-paciente.component.html',
 })
 export class ChamarPacienteComponent {
   showAlert = false;
 
   modalAberto = false;
-  consultorioSelecionado = '';
+  acaoSelecionada: 'chamar' | 'remover' | null = null;
+
+  consultorios: Consultorio[] = [];
+  consultorioSelecionado: Consultorio | null = null; // Consultório selecionado para chamar o paciente
+
   pacienteSelecionado: Paciente | null = null;
+  pacientes: Paciente[] = []; // Array para armazenar os pacientes
 
   errormessage = '';
   sucessMessage = '';
 
-  pacientes: Paciente[] = []; // Array para armazenar os pacientes
 
   constructor(private api: ApiService) {
     this.refresh();
+    this.carregarConsultorios();
   }
 
-  chamarPaciente(pacienteId: number) {
-    // Chama a senha do paciente e atualiza a lista de pacientes
-    this.api.chamarSenhaPaciente(pacienteId).subscribe({
+  carregarConsultorios(): void {
+    this.api.listarConsultorios().subscribe({
+      next: (consultorios) => {
+        this.consultorios = consultorios;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar consultórios:', err);
+      }
+    });
+  }
+
+  chamarPaciente(pacienteId: number): void {
+    if (!this.consultorioSelecionado) {
+      this.errormessage = 'Selecione um consultório antes de chamar o paciente';
+      this.showAlert = true;
+      this.timer();
+      return;
+    }
+
+    this.api.chamarSenhaPaciente(pacienteId, this.consultorioSelecionado.id).subscribe({
       next: () => {
         this.errormessage = '';
         this.sucessMessage = 'Senha chamada com sucesso!';
         this.showAlert = true;
-
         this.timer();
       },
       error: (err) => {
         this.sucessMessage = '';
-        this.errormessage = 'A senha já foi chamada!';
-
+        this.errormessage = err.error.message || 'Erro ao chamar paciente';
         this.showAlert = true;
         this.timer();
       },
     });
+    this.fecharModal();
   }
 
+  onConsultorioSelecionado(consultorio: Consultorio): void {
+    this.consultorioSelecionado = consultorio;
+  }
   timer() {
     setTimeout(() => {
       this.showAlert = false;
       this.refresh(); // Atualiza a lista de pacientes
-    }, 2000);
+    }, 2500);
+  }
+
+  formatarCPF(cpf: string): string {
+    if (!cpf) return '';
+    // Formata o CPF para o padrão XXX.XXX.XXX-XX
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   }
 
   removerPaciente(pacienteId: number) {
@@ -76,32 +108,42 @@ export class ChamarPacienteComponent {
     });
   }
 
-  abrirModalChamar(paciente: Paciente) {
+  abrirModalChamar(paciente: Paciente, acao: 'chamar' | 'remover') {
     this.pacienteSelecionado = paciente;
+    this.acaoSelecionada = acao;
     this.modalAberto = true;
-    this.consultorioSelecionado = '';
   }
+
+  confirmarAcao() {
+    if (this.acaoSelecionada === 'chamar') {
+      this.chamarPaciente(this.pacienteSelecionado?.id || 0);
+    } else if (this.acaoSelecionada === 'remover') {
+      this.confirmarRemocao();
+    }
+  }
+
 
   fecharModal() {
     this.modalAberto = false;
     this.pacienteSelecionado = null;
-    this.consultorioSelecionado = '';
+    this.consultorioSelecionado = null;
   }
 
-  confirmarChamada() {
-    if (!this.consultorioSelecionado || !this.pacienteSelecionado) {
+
+  confirmarRemocao() {
+    if (!this.pacienteSelecionado) {
       this.showAlert = true;
-      this.errormessage = 'Por favor, selecione um consultório.';
+      this.errormessage = 'Por favor, selecione um paciente para remover.';
 
-      setTimeout(() => {
-          this.showAlert = false;
-        }, 2000);
-      return ;
+      this.timer();
+      return;
     }
-
-    // Faltando somente a logica de chamar o paciente para o consultório selecionado, pois ainda está faltando a implementação do backend para isso.
-    this.chamarPaciente(this.pacienteSelecionado.id);
-
+    // Chama o método de remoção do paciente
+    this.removerPaciente(this.pacienteSelecionado.id);
+    this.errormessage = '';
+    this.showAlert = true;
+    this.sucessMessage = 'Paciente removido com sucesso!';
+    this.timer();
     this.fecharModal();
   }
 

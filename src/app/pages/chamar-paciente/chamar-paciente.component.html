@@ -114,6 +114,9 @@
                 <h3 class="text-lg font-semibold text-gray-900 truncate">
                   {{ paciente.nome }}
                 </h3>
+                <p class="text-xs text-gray-600">
+                  CPF: {{ formatarCPF(paciente.cpf) }}
+                </p>
                 <p class="text-sm text-gray-500">Paciente na fila</p>
               </div>
             </div>
@@ -172,22 +175,63 @@
           <!-- Modal Select -->
           <app-modal
             *ngIf="modalAberto && pacienteSelecionado?.id === paciente.id"
-            [isOpen]="modalAberto"
-            (close)="fecharModal()"
-            (confirm)="confirmarChamada()"
             [title]="'Paciente: ' + paciente.nome"
+            [isOpen]="modalAberto"
+            [confirmButtonText]="
+              acaoSelecionada === 'chamar' ? 'Chamar' : 'Sim, remover'
+            "
+            [confirmButtonClass]="
+              acaoSelecionada === 'chamar'
+                ? 'bg-medical-600 hover:bg-medical-700'
+                : 'bg-red-500 hover:bg-red-600'
+            "
+            [cancelButtonText]="'Cancelar'"
+            (close)="fecharModal()"
+            (confirm)="confirmarAcao()"
           >
+            @if(acaoSelecionada === 'chamar') {
             <app-consultorio-select
-              [(selectedConsultorio)]="consultorioSelecionado"
+              [consultorios]="consultorios"
+              [selectedConsultorio]="consultorioSelecionado"
+              (selectedConsultorioChange)="onConsultorioSelecionado($event)"
             ></app-consultorio-select>
+            }@else() {
+            <div class="p-4 text-center">
+              <svg
+                class="mx-auto h-12 w-12 text-red-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <h3 class="mt-2 text-lg font-medium text-gray-900">
+                Confirmação
+              </h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  Tem certeza que deseja remover permanentemente o paciente
+                  <strong>{{ pacienteSelecionado?.nome }}</strong
+                  >?
+                </p>
+                <p class="mt-1 text-xs text-red-500">
+                  Esta ação não poderá ser desfeita
+                </p>
+              </div>
+            </div>
+            }
           </app-modal>
           <!-- Action Buttons -->
           <div
             class="flex flex-col sm:flex-row gap-2 lg:flex-col xl:flex-row lg:w-auto"
           >
-            <!-- (click)="chamarPaciente(pacienteslist.id)" -->
             <button
-              (click)="abrirModalChamar(paciente)"
+              (click)="abrirModalChamar(paciente, 'chamar')"
               class="bg-medical-600 hover:bg-medical-700 text-white font-medium py-2.5 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2 flex items-center justify-center gap-2 min-w-[120px]"
             >
               <svg
@@ -207,7 +251,7 @@
             </button>
 
             <button
-              (click)="removerPaciente(paciente.id)"
+              (click)="abrirModalChamar(paciente, 'remover')"
               class="bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 flex items-center justify-center gap-2 min-w-[120px]"
             >
               <svg
