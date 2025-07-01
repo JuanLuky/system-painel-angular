@@ -6,13 +6,13 @@
   <select
     id="consultorio"
     class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-gray-700 bg-white transition-all duration-200 cursor-pointer focus:border-medical-600 focus:ring-4 focus:ring-medical-100 hover:border-gray-300"
-    [(ngModel)]="selectedConsultorio"
-    (ngModelChange)="onSelectionChange($event)"
+    (change)="onSelectChange($event)"
+    [value]="selectedConsultorio?.id"
   >
     <option value="">Escolha um consultório...</option>
-    @for(consultorio of consultorios; track consultorio.value) {
-      <option [value]="consultorio.value">
-        {{ consultorio.label }}
+    @for(consultorio of consultorios; track consultorio.id) {
+      <option [value]="consultorio.id">
+        {{ consultorio.nome }} - {{ consultorio.status }}
       </option>
     }
   </select>
